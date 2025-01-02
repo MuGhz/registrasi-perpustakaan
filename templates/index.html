@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Perpustakaan Nasional RI</title>
+    <link rel="icon" href="/static/assets/img/favicon.ico" type="image/x-icon">
+</head>
+
+<body class="bg-gray-100 p-8">
+
+    <div class="container mx-auto">
+        <h1 onclick="window.location.href='/'" style="cursor: pointer;" class="text-2xl font-bold mb-4">Daftar
+            Perpustakaan Teregister Inlislite</h1>
+
+        <!-- Kolom Pencarian -->
+        <form method="GET" class="mb-6">
+            <input type="text" name="search" value="{{.SearchQuery}}"
+                placeholder="Cari berdasarkan nama, jenis, provinsi, kode registrasi, atau tahun..."
+                class="w-full p-2 border border-gray-300 rounded-md" />
+            <div class="flex justify-between w-full">
+                <button type="submit" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md">Cari</button>
+                <button type="button" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md"
+                    onclick="window.location.href='/download'">Download</button>
+            </div>
+        </form>
+
+
+        <!-- Tabel -->
+        <div class="overflow-hidden rounded-lg border border-gray-200 shadow-md">
+            <table class="min-w-full divide-y divide-gray-200 bg-white">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">#</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Nama Perpustakaan
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Jenis</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Provinsi</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Kode Registrasi
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-medium text-gray-500">Tahun</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {{range $index, $lib := .Libraries}}
+                    <tr class="{{if mod $index 2}}bg-gray-50{{else}}bg-white{{end}}">
+                        <td class="px-6 py-4 text-sm text-gray-900">{{$lib.DisplayIndex}}</td>
+                        <td class="px-6 py-4 text-sm text-gray-900">{{$lib.Name}}</td>
+                        <td class="px-6 py-4 text-sm text-gray-900">{{$lib.Type}}</td>
+                        <td class="px-6 py-4 text-sm text-gray-900">{{$lib.Province}}</td>
+                        <td class="px-6 py-4 text-sm text-gray-900">{{$lib.RegistrationCode}}</td>
+                        <td class="px-6 py-4 text-sm text-gray-900">{{$lib.Year}}</td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Pagination -->
+    <div class="flex justify-between items-center mt-6 container mx-auto">
+        {{if gt .CurrentPage 1}}
+        <a href="/?page={{sub .CurrentPage 1}}&search={{.SearchQuery}}"
+            class="px-4 py-2 bg-blue-500 text-white rounded-md">Previous</a>
+        {{else}}
+        <span class="px-4 py-2 bg-gray-300 text-white rounded-md cursor-not-allowed">Previous</span>
+        {{end}}
+
+        <p class="text-sm text-gray-600">Halaman {{.CurrentPage}} dari {{.TotalPages}}</p>
+
+        {{if lt .CurrentPage .TotalPages}}
+        <a href="/?page={{add .CurrentPage 1}}&search={{.SearchQuery}}"
+            class="px-4 py-2 bg-blue-500 text-white rounded-md">Next</a>
+        {{else}}
+        <span class="px-4 py-2 bg-gray-300 text-white rounded-md cursor-not-allowed">Next</span>
+        {{end}}
+    </div>
+    </div>
+
+</body>
+
+</html>
